@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <style>
+        body {
+            font-family: Arial, sans-serif !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #f4ece2 !important;
+        }
+
+        .navbar {
+            background: white;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 25px;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .logo img {
+            width: 50px;
+            height: auto;
+            margin-right: 8px;
+        }
+
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            width: 320px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-grow: 1;
+            max-width: 600px;
+            margin: 0 15px;
+        }
+
+        .search-bar input {
+            padding: 12px;
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 18px;
+        }
+
+        .search-bar button {
+            background: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            font-size: 18px;
+        }
+
+        .user-options {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+        .user-options a {
+            text-decoration: none;
+            color: black;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sign-in {
+            background: #ff4d4d;
+            color: white !important;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .cart-icon {
+            font-size: 22px;
+            cursor: pointer;
+        }
+        .image a{
+            color: black !important;
+            text-decoration: none !important;
+            align-items: center !important;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="navbar">
+            <div class="logo">
+                <a class="image" href="index.html">
+                    <img src="11zon_cropped.png" alt="Book Icon" class="book-image"> BOOKVILLA</a>
+            </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search Books, Authors, Publishers, ISBN No...">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        <div class="user-options">
+            <a href="favorites.html"><i class="fas fa-heart"></i> Favorites</a>
+            <a href="cart.html"><i class="fa-solid fa-cart-shopping cart-icon"></i> Cart</a>
+            <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+        </div>
+    </nav>
+    </body>
+</html>

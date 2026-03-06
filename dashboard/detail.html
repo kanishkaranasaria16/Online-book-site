@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            display: flex;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 16% !important;
+        }
+
+        .book-image {
+            width: 250px;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .details {
+            flex: 1;
+            padding-left: 20px;
+        }
+
+        .title {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .author {
+            color: #007bff;
+            font-size: 18px;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #d9534f;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: gray;
+            font-size: 16px;
+        }
+
+        .discount {
+            color: green;
+            font-size: 16px;
+        }
+
+        .stock {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .description {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .buttons {
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        .add-to-cart {
+            background-color: #d9534f;
+            color: white;
+        }
+
+        .buy-now {
+            background-color: white;
+            color: #d9534f;
+            border: 2px solid #d9534f;
+        }
+
+        .quantity {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity button {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .quantity input {
+            width: 40px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 100px;
+            left: 20px;
+            font-size: 16px;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5% !important;
+        }
+
+        .back-button i {
+            font-size: 18px;
+        }
+
+        .rating i {
+            color: #f8d64e;
+            font-size: 18px;
+            margin-right: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar"></div>
+    <a href="http://localhost/kanishka/dashboard/engineering.html?category_id=1" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    <div class="container">
+        <img id="bookImage" src="" alt="Book Image">
+        <div class="details">
+            <h1 class="title" id="title"></h1>
+            <p class="author" id="author"></p>
+            <p class="price">₹<span id="price"></span> <span class="original-price">₹<span
+                        id="originalPrice"></span></span> <span class="discount">(<span id="discount"></span>%
+                    OFF)</span></p>
+            <p class="stock" id="stock"></p>
+            <p class="rating" id="rating"></p>
+            <div class="quantity">
+                <button onclick="changeQuantity(-1)">-</button>
+                <input type="text" id="quantity" value="1" readonly>
+                <button onclick="changeQuantity(1)">+</button>
+            </div>
+            <div class="buttons">
+                <button class="btn add-to-cart" onclick="addToCart()">ADD TO CART</button>
+                <button class="btn buy-now "onclick="addToCart()">BUY NOW</button>
+                <p class="description" id="description"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+    <script>
+        $(document).ready(function () {
+            $("#navbar").load("navbar.html");
+            $("#footer").load("footer.html");
+            let params = new URLSearchParams(window.location.search);
+            let bookId = params.get("book_id");
+            if (!bookId) {
+                alert("Invalid book ID.");
+                window.location.href = "books.html";
+                return;
+            }
+            $.get(`fetch_details.php?book_id=${bookId}`, function (data) {
+                let book = JSON.parse(data);
+                if (!book) {
+                    alert("Book not found.");
+                    window.location.href = "books.html";
+                    return;
+                }
+
+                document.getElementById("title").innerText = book.title;
+                document.getElementById("author").innerText = book.author;
+                document.getElementById("price").innerText = book.price;
+                document.getElementById("originalPrice").innerText = book.original_price;
+                document.getElementById("discount").innerText = book.discount_percentage;
+                if (book.stock > 0) {
+                    $("#stock").text("In Stock").css("color", "green");
+                } else {
+                    $("#stock").text("Out of Stock").css("color", "red");
+                }
+                document.getElementById("description").innerText = book.description;
+
+                document.getElementById("bookImage").src = book.image_url;
+
+                let ratingHTML = "";
+                let rating = Math.round(book.rating);
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= rating) {
+                        ratingHTML += `<i class="fas fa-star"></i>`;
+                    } else {
+                        ratingHTML += `<i class="far fa-star"></i>`;
+                    }
+                }
+                document.getElementById("rating").innerHTML = ratingHTML;
+            });
+
+        });
+
+        function addToCart() {
+            let params = new URLSearchParams(window.location.search);
+            let bookId = params.get("book_id");
+
+            $.get(`fetch_details.php?book_id=${bookId}`, function (data) {
+                let book = JSON.parse(data);
+
+                let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                let existingBook = cart.find(item => item.book_id == bookId);
+                if (!existingBook) {
+                    cart.push({
+                        book_id: bookId,
+                        title: book.title,
+                        price: book.price,
+                        image: book.image_url,
+                        quantity: 1
+                    });
+
+                    localStorage.setItem("cart", JSON.stringify(cart));
+                    alert("Book added to cart!");
+                } else {
+                    alert("Book is already in the cart.");
+                }
+            });
+        }
+        function displayCart() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cartContainer = document.getElementById("cart-items");
+    let totalItems = 0;
+    let totalPrice = 0;
+
+    cartContainer.innerHTML = "";
+
+    if (cart.length === 0) {
+        cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+        return;
+    }
+
+    cart.forEach(item => {
+        totalItems += item.quantity;
+        totalPrice += item.price * item.quantity;
+
+        cartContainer.innerHTML += `
+            <div class="cart-item">
+                <img src="${item.image_url}" alt="${item.title}" class="cart-image">
+                <div>
+                    <h4>${item.title}</h4>
+                    <p>₹${item.price}</p>
+                    <div class="quantity-controls">
+                        <button onclick="updateQuantity(${item.book_id}, -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="updateQuantity(${item.book_id}, 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    document.getElementById("totalItems").innerText = totalItems;
+    document.getElementById("totalPrice").innerText = `₹${totalPrice}`;
+}
+document.addEventListener("DOMContentLoaded", displayCart);
+        function changeQuantity(change) {
+            let quantityInput = document.getElementById("quantity");
+            let currentQuantity = parseInt(quantityInput.value);
+            let newQuantity = currentQuantity + change;
+            if (newQuantity >= 1) {
+                quantityInput.value = newQuantity;
+            }
+        }
+    </script>
+</body>
+
+</html>

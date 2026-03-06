@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Something for Everyone - Bookscape</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f5f2;
+            color: #333;
+        }
+
+        .something-for-everyone {
+            margin-top: 10% !important;
+            background-color: #ffe8e1;
+            border: 2px solid #e55b2b;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            width: 80%;
+            text-align: center;
+        }
+
+        .something-for-everyone h2 {
+            color: #e55b2b;
+            font-size: 24px;
+        }
+
+        .something-for-everyone p {
+            font-size: 16px;
+        }
+
+        .divider {
+            width: 50px;
+            height: 3px;
+            background-color: #e55b2b;
+            margin: 10px auto;
+            border: none;
+        }
+
+        .something-for-everyone ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .something-for-everyone li {
+            font-size: 14px;
+            margin: 8px 0;
+        }
+
+        .book-categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            justify-content: center;
+            margin: 20px auto;
+            width: 80%;
+        }
+
+        .category {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .book-categories {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .category {
+                width: 90%;
+            }
+        }
+        .image {
+            color: black;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .logo img {
+            width: 50px;
+            height: auto;
+            margin-right: 8px;
+        }
+        .navbar {
+            background: white;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 25px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a class="image" href="index.html">
+                <img src="11zon_cropped.png" alt="Book Icon" class="book-image"> BOOKVILLA</a>
+        </div>
+    </div>
+    <section class="something-for-everyone">
+        <h2>SOMETHING FOR EVERYONE</h2>
+        <p>Find your next read at Bookscape</p>
+        <hr class="divider">
+        <ul>
+            <li>Books for all ages</li>
+            <li>Books across a wide range of genres: <strong>Academics, Fiction, Non-Fiction, Teen & Young Adult,
+                    Children, Comics</strong>, and more.</li>
+            <li>Books from the top publishers from within India and across the world</li>
+            <li>Books to suit every interest, preference and mood: <strong>Romance, self-improvement, leadership tips,
+                    exam prep, comedy, art, history, religion</strong> and so on.</li>
+            <li>Books that are bestsellers to future releases</li>
+        </ul>
+    </section>
+    <section class="book-categories">
+        <div class="category">
+            <img src="fiction.svg" alt="Fiction" class="category-icon">
+            <h3>Fiction</h3>
+            <p>An exhaustive collection across romance, crime, thriller and mystery, fantasy, horror and science
+                fiction, historical fiction, religious and spiritual fiction, Indian writing, and dystopian genres.</p>
+        </div>
+        <div class="category">
+            <img src="non-fiction.svg" alt="Non-fiction" class="category-icon">
+            <h3>Non-fiction</h3>
+            <p>Find inspiring biographies, explore current affairs and social issues, or seek self-improvement with
+                titles like <em>Can’t Hurt Me</em> and <em>Man’s Search for Meaning</em>.</p>
+        </div>
+        <div class="category">
+            <img src="academics.svg" alt="Academics" class="category-icon">
+            <h3>Academics</h3>
+            <p>Find academic books for every requirement from top publishers: schoolbooks, higher education, exam prep
+                (IIT, NEET, UPSC), and reference books.</p>
+        </div>
+        <div class="category">
+            <img src="Teen-Adult.svg" alt="Teen & Young Adult" class="category-icon">
+            <h3>Teen & Young Adult</h3>
+            <p>Captivating coming-of-age stories like <em>Diary of a Space Traveller</em>, <em>Alice’s Adventures in
+                    Wonderland</em>, and <em>Little Women</em>.</p>
+        </div>
+        <div class="category">
+            <img src="children.svg" alt="Children" class="category-icon">
+            <h3>Children</h3>
+            <p>Fairy tales, folktales, activity books, and comics like <em>Panchatantra Tales</em> and <em>The Jungle
+                    Book</em>.</p>
+        </div>
+        <div class="category">
+            <img src="comic-novels.svg" alt="Comics & Manga" class="category-icon">
+            <h3>Comics & Manga</h3>
+            <p>Superheroes from Marvel and DC, Chacha Chaudhary, and Wimpy Kid all make their home here.</p>
+        </div>
+    </section>
+
+</body>
+
+</html>

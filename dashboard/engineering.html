@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding-top: 60px;
+            background-color: #f8f9fa;
+        }
+
+        #navbar-container {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            margin: 20px;
+            margin-top: 10%;
+        }
+
+        .filter-section {
+            width: 250px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            position: sticky;
+            top: 80px;
+        }
+
+        #books {
+            flex-grow: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .book-card {
+            width: 220px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            background-color: #fff;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .book-card img {
+            width: 120px;
+            height: auto;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .price {
+            font-weight: bold;
+            color: green;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        .discount {
+            color: red;
+        }
+
+        .cart-btn {
+            background-color: red;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            width: 80%;
+            margin-top: 10px;
+        }
+
+        .rating {
+            color: #f5c518;
+            font-size: 18px;
+        }
+
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            font-size: 17px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .toast.show {
+            visibility: visible;
+            animation: fadeInOut 3s;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .fav-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar-container"></div>
+
+    <div class="container">
+        <div class="filter-section">
+            <div class="filter-title">Filter</div>
+
+            <label for="authorFilter">Author:</label>
+            <select id="authorFilter" onchange="applyFilter()">
+                <option value="">All Authors</option>
+            </select>
+
+            <label for="priceFilter">Max Price:</label>
+            <input type="number" id="priceFilter" placeholder="Enter max price" oninput="applyFilter()">
+
+            <label for="ratingFilter">Minimum Rating:</label>
+            <select id="ratingFilter" onchange="applyFilter()">
+                <option value="">Any</option>
+                <option value="1">★ 1 & up</option>
+                <option value="2">★ 2 & up</option>
+                <option value="3">★ 3 & up</option>
+                <option value="4">★ 4 & up</option>
+                <option value="5">★ 5</option>
+            </select>
+
+            <button class="clear-btn" onclick="clearFilters()">Clear All</button>
+        </div>
+
+        <div id="books"></div>
+    </div>
+    <div id="toast" class="toast">Book added to cart!</div>
+    <div id="footer-container"></div>
+    <script>
+        let books = [];
+
+        $(document).ready(function () {
+            let params = new URLSearchParams(window.location.search);
+            let categoryId = params.get("category_id") || 0;
+
+            $("#navbar-container").load("navbar.html");
+            $("#footer-container").load("bottem.html");
+            $.get(`fetch_books.php?category_id=${categoryId}`)
+                .done(function (data) {
+                    books = data;
+                    populateFilters(books);
+                    displayBooks(books);
+                })
+                .fail(function (xhr, status, error) {
+                    console.error("AJAX Error:", status, error);
+                });
+        });
+
+        function populateFilters(books) {
+            let authors = [...new Set(books.map(book => book.author))];
+            let authorFilter = document.getElementById("authorFilter");
+            authorFilter.innerHTML = `<option value="">All Authors</option>`;
+            authors.forEach(author => {
+                let option = document.createElement("option");
+                option.value = author;
+                option.textContent = author;
+                authorFilter.appendChild(option);
+            });
+        }
+
+        function applyFilter() {
+            let selectedAuthor = document.getElementById("authorFilter").value;
+            let maxPrice = document.getElementById("priceFilter").value;
+            let minRating = document.getElementById("ratingFilter").value;
+
+            let filteredBooks = books.filter(book =>
+                (!selectedAuthor || book.author === selectedAuthor) &&
+                (!maxPrice || book.price <= maxPrice) &&
+                (!minRating || book.rating >= minRating)
+            );
+
+            displayBooks(filteredBooks);
+        }
+
+        function clearFilters() {
+            document.getElementById("authorFilter").value = "";
+            document.getElementById("priceFilter").value = "";
+            document.getElementById("ratingFilter").value = "";
+            displayBooks(books);
+        }
+
+        function displayBooks(filteredBooks) {
+            let favoriteBooks = JSON.parse(sessionStorage.getItem("favorites")) || [];
+            let html = "";
+            filteredBooks.forEach(book => {
+                let isFavorite = favoriteBooks.some(fav => fav.id === book.id);
+                html += `
+            <div class="book-card">
+               <img src="${book.image_url}" alt="${book.title}" onclick="redirectToDetails(${book.id})">
+                <p><strong>${book.title}</strong></p>
+                <p>${book.author}</p>
+                <p class="price">₹${book.price} <span class="original-price">₹${book.original_price}</span></p>
+                <p class="discount">(${book.discount_percentage}% OFF)</p>
+                <p class="rating">${'★'.repeat(book.rating || 0)}</p>
+                <button class="cart-btn" onclick='addToCart(${JSON.stringify(book)})'>Add to Cart</button>
+                <button class="fav-btn" onclick='toggleFavorite(${JSON.stringify(book)})'>
+                <i class="fa${isFavorite ? 's' : 'r'} fa-heart fav-icon" data-id="${book.id}"></i>
+            </button>
+            </div>`;
+            });
+            document.getElementById("books").innerHTML = html;
+        }
+        function addToCart(book) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let existingItem = cart.find(item => item.id === book.id);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                book.quantity = 1;
+                cart.push(book);
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+            showToast(`${book.title} added to cart!`);
+        }
+
+        function toggleFavorite(book) {
+            let favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
+            let index = favorites.findIndex(fav => fav.id === book.id);
+            let message = "";
+
+            if (index > -1) {
+                favorites.splice(index, 1);
+                message = `${book.title} removed from favorites!`;
+            } else {
+                favorites.push(book);
+                message = `${book.title} added to favorites!`;
+            }
+
+            sessionStorage.setItem("favorites", JSON.stringify(favorites));
+            displayBooks(books);
+            showToast(message);
+        }
+
+        function showToast(message) {
+            let toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.add("show");
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+
+        function loadCart() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let cartHTML = "";
+
+            cart.forEach(book => {
+                cartHTML += `
+                <div class="cart-item">
+                    <p><strong>${book.title}</strong></p>
+                    <p>₹${book.price} x ${book.quantity}</p>
+                    <button onclick="removeFromCart(${book.id})">Remove</button>
+                </div>
+            `;
+            });
+
+            document.getElementById("cart-items").innerHTML = cartHTML || "<p>Your cart is empty.</p>";
+        }
+
+        function removeFromCart(bookId) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart = cart.filter(book => book.id !== bookId);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            loadCart();
+        }
+        function redirectToDetails(bookId) {
+            window.location.href = `detail.html?book_id=${bookId}`;
+        }
+
+    </script>
+</body>
+
+</html>

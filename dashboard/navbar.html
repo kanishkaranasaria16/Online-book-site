@@ -1,0 +1,266 @@
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <style>
+        body {
+            font-family: Arial, sans-serif !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #f4ece2 !important;
+        }
+
+        .navbar {
+            background: white;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 25px;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .logo img {
+            width: 50px;
+            height: auto;
+            margin-right: 8px;
+        }
+
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            width: 320px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-grow: 1;
+            max-width: 600px;
+            margin: 0 15px;
+        }
+
+        .search-bar input {
+            padding: 12px;
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 18px;
+        }
+
+        .search-bar button {
+            background: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            font-size: 18px;
+        }
+
+        .user-options {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+        .user-options a {
+            text-decoration: none;
+            color: black;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sign-in {
+            background: #ff4d4d;
+            color: white !important;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .cart-icon {
+            font-size: 22px;
+            cursor: pointer;
+        }
+        .category-links {
+            display: flex;
+            justify-content: center;
+            padding: 12px 0;
+            position: fixed;
+            top: 70px;
+            width: 100%;
+            background: white;
+            z-index: 999;
+            gap: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .category-item {
+            position: relative !important;
+            font-size: 20px;
+            color: black;
+            cursor: pointer;
+            padding: 8px 12px;
+            font-weight: bold;
+        }
+
+        .category-item a{
+            text-decoration: none;
+            color: black;
+        }
+
+        .category-item:not(:last-child)::after {
+            content: "|";
+            color: #ccc;
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+        }
+
+        .category-item .dropdown {
+            display: none;
+            position: absolute;
+            top: 35px;
+            left: 0;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            padding: 8px;
+            z-index: 100;
+            border: 1px solid #ddd;
+        }
+
+        .category-item .dropdown a {
+            display: block;
+            padding: 10px;
+            font-size: 18px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .category-item .dropdown a:hover {
+            background: #f2f2f2;
+        }
+
+        .category-item:hover .dropdown {
+            display: block;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="navbar">
+        <div class="logo">
+            <img src="11zon_cropped.png" alt="Book Icon" class="book-image"> BOOKVILLA
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search Books, Authors, Publishers, ISBN No...">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        <div class="user-options">
+            <a href="favorites.html"><i class="fas fa-heart"></i> Favorites</a>
+            <a href="cart.html"><i class="fa-solid fa-cart-shopping cart-icon"></i> Cart</a>
+            <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+        </div>
+    </nav>
+    <div class="category-links">
+        <div class="category-item">
+            <a href="acadmic.html">Academics</a>
+            <div class="dropdown">
+                <a href="engineering.html?category_id=1">Engineering</a>
+                <a href="engineering.html?category_id=2">Medical</a>
+                <a href="engineering.html?category_id=3">Law</a>
+                <a href="engineering.html?category_id=4">Commerce</a>
+                <a href="engineering.html?category_id=5">Science</a>
+                <a href="engineering.html?category_id=6">Humanities</a>
+            </div>
+        </div>
+
+        <div class="category-item">
+            <a href="fiction.html">Fiction</a>
+            <div class="dropdown">
+                <a href="engineering.html?category_id=7">Science Fiction</a>
+                <a href="engineering.html?category_id=8">Fantasy</a>
+                <a href="engineering.html?category_id=9">Thriller</a>
+                <a href="engineering.html?category_id=10">Romance</a>
+                <a href="engineering.html?category_id=11">Horror</a>
+                <a href="engineering.html?category_id=12">Historical</a>
+            </div>
+        </div>
+
+        <div class="category-item">
+            <a href="non-Fiction.html">Non-Fiction</a>
+            <div class="dropdown">
+                <a href="engineering.html?category_id=13">Biography</a>
+                <a href="engineering.html?category_id=14">Business</a>
+                <a href="engineering.html?category_id=15">Self-Help</a>
+                <a href="engineering.html?category_id=16">Philosophy</a>
+                <a href="engineering.html?category_id=17">History</a>
+            </div>
+        </div>
+
+        <div class="category-item">
+            <a href="children.html">Children</a>
+            <div class="dropdown">
+                <a href="engineering.html?category_id=18">Picture Books</a>
+                <a href="engineering.html?category_id=19">Young Readers</a>
+                <a href="engineering.html?category_id=20">Comics</a>
+                <a href="engineering.html?category_id=21">Stories</a>
+            </div>
+        </div>
+
+        <div class="category-item">
+            <a href="regional.html">Regional</a>
+            <div class="dropdown">
+                <a href="engineering.html?category_id=22">Hindi</a>
+                <a href="engineering.html?category_id=23">Tamil</a>
+                <a href="engineering.html?category_id=24">Bengali</a>
+                <a href="engineering.html?category_id=25">Marathi</a>
+            </div>
+        </div>
+
+        <div class="category-item">
+            <a href="stationery.html">Stationery</a>
+            <div class="dropdown">
+                <a href="engineering.html?category_id=26">Notebooks</a>
+                <a href="engineering.html?category_id=27">Art Supplies</a>
+                <a href="engineering.html?category_id=28">Exam Prep</a>
+            </div>
+        </div>
+
+        <div class="category-item">
+            <a href="lifestyle.html">Lifestyle</a>
+            <div class="dropdown">
+                <a href="engineering.html?category_id=29">Health</a>
+                <a href="engineering.html?category_id=30">Travel</a>
+                <a href="engineering.html?category_id=31">Cooking</a>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            updateNavbar();
+        });
+    </script>
+    </body>
+</html>

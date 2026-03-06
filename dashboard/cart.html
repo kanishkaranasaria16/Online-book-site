@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .navbar {
+            background: white;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 25px;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .logo img {
+            width: 50px;
+            height: auto;
+            margin-right: 8px;
+        }
+
+        .cart-container {
+            margin-top: 6%;
+            width: 60%;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cart-item img {
+            width: 60px;
+            height: auto;
+            margin-right: 15px;
+            border-radius: 5px;
+        }
+
+        .summary-card {
+            margin-top: 6%;
+            width: 35%;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .proceed-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .order-details input,
+        .order-details select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .image {
+            color: black;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .quantity-display {
+            font-size: 16px;
+            font-weight: bold;
+            width: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a class="image" href="index.html">
+                <img src="11zon_cropped.png" alt="Book Icon" class="book-image"> BOOKVILLA</a>
+        </div>
+    </div>
+
+    <div class="cart-container">
+        <h2>Your Cart</h2>
+        <div id="cart-items"></div>
+        <p><a href="index.html">⬅ Continue Shopping</a></p>
+    </div>
+
+    <div class="summary-card">
+        <h3>Order Summary</h3>
+        <p><strong>Total Items:</strong> <span id="total-items">0</span></p>
+        <p><strong>Total Price:</strong> ₹<span id="total-price">0</span></p>
+
+        <div class="order-details">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" placeholder="Enter your name" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" placeholder="Enter phone number" required>
+
+            <label for="address">Delivery Address:</label>
+            <input type="text" id="address" placeholder="Enter delivery address" required>
+
+            <label for="payment-method">Payment Method:</label>
+            <select id="payment-method" onchange="toggleCardDetails()">
+                <option value="cash">Cash on Delivery</option>
+                <option value="card">Credit/Debit Card</option>
+            </select>
+
+            <div id="card-details" class="hidden">
+                <label for="card-number">Card Number:</label>
+                <input type="text" id="card-number" placeholder="Enter card number" maxlength="16">
+
+                <label for="expiry">Expiry Date:</label>
+                <input type="text" id="expiry" placeholder="MM/YY" maxlength="5">
+
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" placeholder="123" maxlength="3">
+            </div>
+        </div>
+
+        <button class="proceed-btn" onclick="proceedToPayment()">Proceed to Pay</button>
+    </div>
+
+    <script>
+        function loadCart() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let cartHTML = "";
+            let totalItems = 0;
+            let totalPrice = 0;
+
+            if (cart.length === 0) {
+                cartHTML = "<p>Your cart is empty.</p>";
+            } else {
+                cart.forEach((book, index) => {
+                    totalItems += book.quantity;
+                    totalPrice += book.price * book.quantity;
+
+                    cartHTML += `
+                        <div class="cart-item">
+                            <span>${book.title} - ₹${book.price}</span>
+                             <div class="quantity-container">
+                                <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                                <span id="quantity-${index}" class="quantity-display">${book.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            document.getElementById("cart-items").innerHTML = cartHTML;
+            document.getElementById("total-items").innerText = totalItems;
+            document.getElementById("total-price").innerText = totalPrice;
+        }
+
+        function toggleCardDetails() {
+            let paymentMethod = document.getElementById("payment-method").value;
+            let cardDetails = document.getElementById("card-details");
+
+            if (paymentMethod === "card") {
+                cardDetails.classList.remove("hidden");
+            } else {
+                cardDetails.classList.add("hidden");
+            }
+        }
+
+        function proceedToPayment() {
+            let name = document.getElementById("name").value.trim();
+            let phone = document.getElementById("phone").value.trim();
+            let address = document.getElementById("address").value.trim();
+            let paymentMethod = document.getElementById("payment-method").value;
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            if (!name || !phone || !address) {
+                alert("Please fill in all details.");
+                return;
+            }
+
+            if (paymentMethod === "card") {
+                let cardNumber = document.getElementById("card-number").value.trim();
+                let expiry = document.getElementById("expiry").value.trim();
+                let cvv = document.getElementById("cvv").value.trim();
+
+                if (!cardNumber || !expiry || !cvv) {
+                    alert("Please enter complete card details.");
+                    return;
+                }
+            }
+
+            let orderDetails = {
+                name,
+                phone,
+                address,
+                payment_method: paymentMethod,
+                total_items: document.getElementById("total-items").innerText,
+                total_price: document.getElementById("total-price").innerText,
+                cart
+            };
+
+            fetch("save_order.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(orderDetails)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Order placed successfully!");
+                        localStorage.removeItem("cart");
+                        window.location.href = "order_confirmation.html";
+                    } else {
+                        alert("Error: " + data.message);
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+        }
+
+        loadCart();
+        function updateQuantity(index, change) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            if (cart[index]) {
+                cart[index].quantity += change;
+                if (cart[index].quantity <= 0) {
+                    cart.splice(index, 1);
+                }
+                localStorage.setItem("cart", JSON.stringify(cart));
+                loadCart();
+            }
+        }
+    </script>
+
+</body>
+
+</html>

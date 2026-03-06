@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .contact-container {
+            margin-top: 6% !important;
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .contact-info {
+            width: 40%;
+            padding: 20px;
+            background: linear-gradient(to bottom right, #b91d1d, #8a1c1c);
+            color: white;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .contact-info h2 {
+            margin-bottom: 10px;
+        }
+
+        .contact-form {
+            width: 55%;
+            padding: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        textarea {
+            height: 100px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #b91d1d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #8a1c1c;
+        }
+        .warn{
+            margin-left: 10%;
+            text-align: center;
+        }
+        .image {
+            color: black;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .logo img {
+            width: 50px;
+            height: auto;
+            margin-right: 8px;
+        }
+        .navbar {
+            background: white;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 25px;
+            box-sizing: border-box;
+        }
+        h1{
+            margin-top: 6% !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a class="image" href="index.html">
+                <img src="11zon_cropped.png" alt="Book Icon" class="book-image"> BOOKVILLA</a>
+        </div>
+    </div>
+    <h1><center>CONTACT US</center></h1>
+    <div class="contact-container">
+        <div class="contact-info">
+            <h2>Get in touch</h2>
+            <p>Hey, Fill up this form and we will get back to you.</p>
+            <p>📞 +91 8652050510 (11am to 7pm, Mon-Fri)</p>
+            <p>📧 customer@bookscape.com</p>
+            <p>📍 Sun Paradise, 11th, Senapati Bapat Marg, Lower Parel, Mumbai, Maharashtra 400013</p>
+        </div>
+
+        <form action="contact.php" method="POST" class="contact-form">
+            <div class="form-group">
+                <input type="text" name="first_name" placeholder="First Name" required>
+                <input type="text" name="last_name" placeholder="Last Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="tel" name="phone" placeholder="Phone Number" required>
+            </div>
+            <textarea name="message" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+    <p class="warn">We are trying our best to provide your order as soon as possible. <br>Feel free to email us at customer@bookscape.com for any questions, grievances, or feedback. <br>Please note responses can be delayed.</p>
+</body>
+
+</html>

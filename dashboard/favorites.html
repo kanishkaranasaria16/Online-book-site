@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorites</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding-top: 60px;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+        }
+
+        .book-card {
+            width: 220px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            background-color: #fff;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .book-card img {
+            width: 120px;
+            height: auto;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .cart-btn {
+            background-color: red;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            flex: 1;
+            margin-right: 5px;
+            border-radius: 5px;
+        }
+
+        .remove-btn {
+            background: none;
+            color: red;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .remove-btn i {
+            margin-right: 5px;
+        }
+
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            font-size: 17px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .toast.show {
+            visibility: visible;
+            animation: fadeInOut 3s;
+        }
+
+        h2 {
+            margin-top: 8%;
+        }
+
+        .image {
+            color: black;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+    <h2 style="text-align: center;">Your Favorite Books</h2>
+    <div class="container" id="favorites"></div>
+    <div id="toast" class="toast"></div>
+    <div id="footer-placeholder"></div>
+    <script>
+        function loadNavbar() {
+            fetch("nav.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("navbar-placeholder").innerHTML = data;
+                })
+                .catch(error => console.error("Error loading navbar:", error));
+            fetch("bottem.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("footer-placeholder").innerHTML = data;
+                })
+                .catch(error => console.error("Error loading navbar:", error));
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            loadNavbar();
+            displayFavoriteBooks();
+        });
+        document.addEventListener("DOMContentLoaded", displayFavoriteBooks);
+
+        function displayFavoriteBooks() {
+            let favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
+            let favoritesContainer = document.getElementById("favorites");
+
+            if (favorites.length === 0) {
+                favoritesContainer.innerHTML = "<p>No favorite books added.</p>";
+                return;
+            }
+
+            let html = "";
+            favorites.forEach(book => {
+                html += `
+                    <div class="book-card">
+                        <img src="${book.image_url}" alt="${book.title}">
+                        <p><strong>${book.title}</strong></p>
+                        <p>${book.author}</p>
+                        <p class="price">₹${book.price} <span class="original-price">₹${book.original_price}</span></p>
+                        <p class="discount">(${book.discount_percentage}% OFF)</p>
+                        <p class="rating">${'★'.repeat(book.rating || 0)}</p>
+
+                        <div class="buttons">
+                            <button class="cart-btn" onclick='addToCart(${JSON.stringify(book)})'>Add to Cart</button>
+                            <button class="remove-btn" onclick="removeFromFavorites(${book.id})">
+                                <i class="fas fa-heart"></i> Remove
+                            </button>
+                        </div>
+                    </div>`;
+            });
+
+            favoritesContainer.innerHTML = html;
+        }
+
+        function addToCart(book) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let existingItem = cart.find(item => item.id === book.id);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                book.quantity = 1;
+                cart.push(book);
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+            showToast(`${book.title} added to cart!`);
+        }
+
+        function removeFromFavorites(bookId) {
+            let favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
+            bookId = Number(bookId);
+
+            favorites = favorites.filter(book => book.id !== bookId);
+            sessionStorage.setItem("favorites", JSON.stringify(favorites));
+
+            displayFavoriteBooks();
+            showToast("Book removed from favorites!");
+        }
+
+        function showToast(message) {
+            let toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.add("show");
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>

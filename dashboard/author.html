@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Author Details</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        .author-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 1000px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .author-image img {
+            width: 250px;
+            border-radius: 10px;
+        }
+
+        .author-info {
+            text-align: left;
+            margin-left: 20px;
+        }
+
+        .author-info h1 {
+            font-size: 32px;
+            color: #333;
+        }
+
+        .author-info p {
+            font-size: 18px;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        .divider {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .divider hr {
+            width: 80%;
+            border: 1px solid #ccc;
+        }
+
+        .divider img {
+            width: 50px;
+            margin-top: -20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="author-container">
+        <div class="author-image">
+            <img id="author-image" src="" alt="Author Image">
+        </div>
+        <div class="author-info">
+            <h1 id="author-name"></h1>
+            <p id="author-title"></p>
+            <p id="author-description"></p>
+        </div>
+    </div>
+    <div class="divider">
+        <hr>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const authorId = urlParams.get('id');
+
+        if (authorId) {
+            fetch(`get_author.php?id=${authorId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.body.innerHTML = "<h2>Author not found.</h2>";
+                    } else {
+                        document.getElementById('author-name').innerText = data.name;
+                        document.getElementById('author-description').innerText = data.description;
+                        document.getElementById('author-image').src = data.image;
+                        document.getElementById('author-title').innerText = "Irish author, New Thought minister, and an authority on mysticism and mind dynamics";
+                    }
+                })
+                .catch(error => console.error('Error fetching author:', error));
+        } else {
+            document.body.innerHTML = "<h2>No author selected.</h2>";
+        }
+    </script>
+</body>
+
+</html>

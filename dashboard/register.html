@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Bookvilla</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <img src="girl.png" alt="Book Reading">
+            <h2>Welcome to <b>Bookvilla</b></h2>
+            <p>The world of books at your fingertips.</p>
+            <div class="features">
+                <div>
+                    <img src="book.svg" alt="Millions of Titles">
+                    <p>Millions of Titles</p>
+                </div>
+                <div>
+                    <img src="genuine.svg" alt="Genuine Books">
+                    <p>Genuine Books</p>
+                </div>
+                <div>
+                    <img src="great-pricing.svg" alt="Great Pricing">
+                    <p>Great Pricing</p>
+                </div>
+                <div>
+                    <img src="faster-delivery.svg" alt="Faster Delivery">
+                    <p>Faster Delivery</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="dotted-line"></div> 
+
+        <div class="right-section">
+            <h2>Sign Up</h2>
+            <form action="register.php" method="POST" class="form-box">
+                <div class="input-group active">
+                    <input type="text" name="name" class="input-field" placeholder="Full Name" required>
+                    <input type="email" name="email" class="input-field" placeholder="Email address" required>
+                    <input type="password" name="password" class="input-field" placeholder="Password" required>
+                    <button type="submit" class="submit-btn">Sign Up</button>
+                </div>
+            </form>
+            <p>Already have an account? <a href="login.html" class="link">Login</a></p>
+        </div>
+    </div>
+</body>
+</html>

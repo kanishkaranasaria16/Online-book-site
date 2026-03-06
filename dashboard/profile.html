@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        .profile {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            padding-bottom: 20px;
+            background-image: url('profile-background.jpeg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20%;
+            left: 20px;
+            background: #555;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 16px;
+        }
+
+        .back-btn:hover {
+            background: #333;
+        }
+
+        .profile-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 400px;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .edit-btn,
+        .save-btn {
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .edit-btn {
+            background: #2575fc;
+        }
+
+        .edit-btn:hover {
+            background: #1a5bc4;
+        }
+
+        .save-btn {
+            background: green;
+        }
+
+        .save-btn:hover {
+            background: darkgreen;
+        }
+
+        input {
+            width: 90%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Back to Home</button>
+    <div id="navbarContainer"></div>
+    <div class="profile">
+        <div class="profile-card">
+            <h2>User Profile</h2>
+            <p><strong>Name:</strong> <span id="name"></span></p>
+            <input type="text" id="edit_name" class="hidden">
+
+            <p><strong>Email:</strong> <span id="email"></span></p>
+            <input type="text" id="edit_email" class="hidden">
+
+            <p><strong>Phone:</strong> <span id="phone"></span></p>
+            <input type="text" id="edit_phone" class="hidden">
+
+            <p><strong>Address:</strong> <span id="address"></span></p>
+            <input type="text" id="edit_address" class="hidden">
+
+            <button class="edit-btn" onclick="enableEdit()">Edit</button>
+            <button class="save-btn hidden" onclick="saveChanges()">Save</button>
+        </div>
+    </div>
+    <div id="footerContainer"></div>
+    <script>
+        function fetchUser() {
+            fetch("fetch_user.php")
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        document.getElementById("name").textContent = data.name;
+                        document.getElementById("email").textContent = data.email;
+                        document.getElementById("phone").textContent = data.phone;
+                        document.getElementById("address").textContent = data.address;
+
+                        document.getElementById("edit_name").value = data.name;
+                        document.getElementById("edit_email").value = data.email;
+                        document.getElementById("edit_phone").value = data.phone;
+                        document.getElementById("edit_address").value = data.address;
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+        }
+
+        function enableEdit() {
+            document.getElementById("name").classList.add("hidden");
+            document.getElementById("email").classList.add("hidden");
+            document.getElementById("phone").classList.add("hidden");
+            document.getElementById("address").classList.add("hidden");
+
+            document.getElementById("edit_name").classList.remove("hidden");
+            document.getElementById("edit_email").classList.remove("hidden");
+            document.getElementById("edit_phone").classList.remove("hidden");
+            document.getElementById("edit_address").classList.remove("hidden");
+
+            document.querySelector(".edit-btn").classList.add("hidden");
+            document.querySelector(".save-btn").classList.remove("hidden");
+        }
+
+        function saveChanges() {
+            let name = document.getElementById("edit_name").value;
+            let email = document.getElementById("edit_email").value;
+            let phone = document.getElementById("edit_phone").value;
+            let address = document.getElementById("edit_address").value;
+
+            fetch("update_user.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: name, email: email, phone: phone, address: address })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        document.getElementById("name").textContent = data.name;
+                        document.getElementById("email").textContent = data.email;
+                        document.getElementById("phone").textContent = data.phone;
+                        document.getElementById("address").textContent = data.address;
+
+                        document.getElementById("name").classList.remove("hidden");
+                        document.getElementById("email").classList.remove("hidden");
+                        document.getElementById("phone").classList.remove("hidden");
+                        document.getElementById("address").classList.remove("hidden");
+
+                        document.getElementById("edit_name").classList.add("hidden");
+                        document.getElementById("edit_email").classList.add("hidden");
+                        document.getElementById("edit_phone").classList.add("hidden");
+                        document.getElementById("edit_address").classList.add("hidden");
+
+                        document.querySelector(".edit-btn").classList.remove("hidden");
+                        document.querySelector(".save-btn").classList.add("hidden");
+
+                        alert("Profile updated successfully!");
+                    } else {
+                        alert("Update failed: " + data.message);
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+        }
+
+        function goBack() {
+            window.location.href = "index.html";
+        }
+
+        fetchUser();
+        fetch("navbar.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("navbarContainer").innerHTML = data;
+            })
+            .catch(error => console.error("Error loading navbar:", error));
+
+        fetch("bottem.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("footerContainer").innerHTML = data;
+            })
+            .catch(error => console.error("Error loading footer:", error));
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+</body>
+
+</html>

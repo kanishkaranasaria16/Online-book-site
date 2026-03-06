@@ -1,0 +1,73 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Bookvilla</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <img src="girl.png" alt="Book Reading">
+            <h2>Welcome to <b>Bookvilla</b></h2>
+            <p>The world of books at your fingertips.</p>
+            <div class="features">
+                <div>
+                    <img src="book.svg" alt="Millions of Titles">
+                    <p>Millions of Titles</p>
+                </div>
+                <div>
+                    <img src="genuine.svg" alt="Genuine Books">
+                    <p>Genuine Books</p>
+                </div>
+                <div>
+                    <img src="great-pricing.svg" alt="Great Pricing">
+                    <p>Great Pricing</p>
+                </div>
+                <div>
+                    <img src="faster-delivery.svg" alt="Faster Delivery">
+                    <p>Faster Delivery</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="dotted-line"></div> 
+
+        <div class="right-section">
+            <h2>Hello!</h2>
+            <p>Please enter your contact details to Sign up or Sign in.</p>
+            <form id="login-form" class="form-box">
+                <div class="input-group active">
+                    <input type="text" name="identifier" class="input-field" placeholder="Email address or Phone Number" required>
+                    <input type="password" name="password" class="input-field" placeholder="Password" required>
+                    <button type="submit" class="submit-btn">SIGN-IN</button>
+                </div>
+            </form>
+            <p>Don't have an account? <a href="register.html" class="link">Sign up</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("login-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            let formData = new FormData(this);
+
+            fetch("login.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    localStorage.setItem("loggedInUser", JSON.stringify({ userId: data.user_id }));
+                    window.location.href = "index.html";
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+</html>
