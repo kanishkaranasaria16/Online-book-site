@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            transition: margin-left 0.3s;
+        }
+
+        .navbar {
+            background: #fff;
+            color: black;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar button i {
+            background: transparent;
+            color: black;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 22px;
+            transition: background 0.3s;
+        }
+
+        .navbar button:hover i {
+            background: transparent;
+        }
+
+        .navbar input {
+            padding: 8px;
+            width: 250px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .navbar .buttons button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: red;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            height: 60px;
+        }
+
+        .navbar .buttons button i {
+            font-size: 18px !important;
+            margin-right: 5px !important;
+        }
+
+        .navbar .buttons button p{
+            font-size: 20px;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: white;
+            color: black;
+            position: fixed;
+            top: 0;
+            left: -300px;
+            height: 100%;
+            transition: all 0.3s;
+            padding-top: 60px;
+        }
+
+        .sidebar button {
+            background: transparent;
+            color: black;
+            font-size: 20px;
+            width: 100px;
+            height: 40px;
+            border: 1px solid black;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            border-radius: 20px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 20px;
+        }
+
+        .sidebar-menu li {
+            padding: 15px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .sidebar-menu li:hover {
+            background: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .sidebar-menu i {
+            font-size: 20px;
+            color: black;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+        .sidebar.active~.content {
+            margin-left: 250px;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            padding: 20px;
+        }
+        .content {
+            margin-left: 0;
+            transition: margin-left 0.3s;
+        }
+        .navbar .buttons a i {
+            margin-right: 5px;
+        }
+
+        .navbar .buttons {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar .buttons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 20px;
+            height: 30px;
+            width: 70px;
+            text-decoration: none;
+            background: red;
+            color: white;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .profile {
+            background: transparent;
+            border: 1px solid black;
+            color: black;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            margin-left: 70%;
+        }
+
+        .profile a {
+            color: rgba(0, 0, 0, 0.8);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            font-size: 20px;
+        }
+
+        .navbar .buttons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            text-decoration: none;
+            color: white;
+            background: red;
+        }
+
+        .logo {
+            height: 55px;
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .sidebar-menu li {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .sidebar-menu li a {
+            text-decoration: none;
+            color: black;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .sidebar-menu li a i {
+            margin-right: 10px;
+        }
+
+        .sidebar-menu li a i:first-child {
+            margin-right: 10px;
+        }
+
+        .arrow-icon {
+            margin-left: auto;
+
+        }
+
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: red;
+            color: #fff;
+            text-align: center;
+            padding: 12px;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .navbar .buttons i {
+            color: white !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <img src="11zon_cropped.png" alt="Logo" class="logo">
+        <button onclick="toggleSidebar()">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+        </button>
+        <div class="profile">
+            <a href="profile.php"><i class="fa fa-user"></i></a>
+        </div>
+        <div class="buttons">
+            <button onclick="logout()">
+                <i class="fa fa-sign-out-alt"></i>
+                <p>Logout</p>
+            </button>
+        </div>
+    </div>
+    <div class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="dashboard.html"><i class="fa fa-chart-line"></i> Dashboard <i class="fa fa-angle-right arrow-icon"></i></a>
+            </li>
+            <li><a href="product.php"><i class="fa fa-box"></i> Product <i class="fa fa-angle-right arrow-icon"></i></a></li>
+            <li><a href="order.php"><i class="fa fa-shopping-cart"></i> Orders <i class="fa fa-angle-right arrow-icon"></i></a>
+            </li>
+            <li><a href="bestseller.php"><i class="fa fa-star"></i> Bestseller<i class="fa fa-angle-right arrow-icon"></i></a></li>
+            <li><a href="categories.php"><i class="fa fa-th-large"></i> Categories<i class="fa fa-angle-right arrow-icon"></i></a></li>
+            <li><a href="author.php"><i class="fa fa-user"></i> Author <i class="fa fa-angle-right arrow-icon"></i></a></li>
+            <li><a href="publisher.php"><i class="fa fa-book"></i> Publisher <i class="fa fa-angle-right arrow-icon"></i></a></li>
+            <li><a href="user.php"><i class="fa fa-users"></i> Customers <i class="fa fa-angle-right arrow-icon"></i></a></li>
+            </li>
+            <li><a href="review.php"><i class="fa fa-star"></i> Reviews <i class="fa fa-angle-right arrow-icon"></i></a></li>
+        </ul>
+        <button onclick="toggleSidebar()">Close</button>
+    </div>
+    <div id="toast" class="toast">Logged out successfully</div>
+    <script>
+        function toggleSidebar() {
+            document.getElementById("sidebar").classList.toggle("active");
+            document.querySelector(".content").classList.toggle("sidebar-active");
+        }        
+        function logout() {
+            let toast = document.getElementById("toast");
+            toast.innerText = "Logged out successfully";
+            toast.classList.add("show");
+
+            setTimeout(function () {
+                toast.classList.remove("show");
+                window.location.href = "index.html";
+            }, 2000);
+        }
+
+    </script>
+</body>
+
+</html>
